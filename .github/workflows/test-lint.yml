@@ -1,0 +1,20 @@
+# This workflows runs always
+name: Test and lint
+
+on:
+  push:
+  pull_request:
+  release:
+
+jobs:
+  test-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install app deps
+        run: echo "running test and lint"

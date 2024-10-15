@@ -29,7 +29,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Print git tag
-        run: git describe --tags --abbrev=0
+        run: git describe --tags --abbrev=0 --always
   
   publish-lib:
     # Only proceed if the tests passed and we're on release

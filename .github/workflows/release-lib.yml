@@ -5,6 +5,8 @@ name: Release library
 on:
   workflow_run:
     # Run after "Test and lint" workflow
+    # This will always point to main (ref will be always main, see docs: 
+    # https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows#workflow_run
     workflows: ['Test and lint']
     types:
       - completed # Only when it's completed
@@ -17,9 +19,17 @@ jobs:
       id-token: write
     steps:
       - name: Print workflow_run event contents and github.ref
+        # https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_run
         run: |
             echo "github.event.workflow_run.conclusion: ${{ github.event.workflow_run.conclusion }}"
+            echo "github.event.workflow_run.head_branch: ${{ github.event.workflow_run.head_branch }}"
+            echo "github.event.workflow_run.head_sha: ${{ github.event.workflow_run.head_sha }}"
+            echo "github.event.workflow_run.event: ${{ github.event.workflow_run.event }}"
             echo "github.ref: ${{ github.ref }}"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Print git tag
+        run: git describe --tags --abbrev=0
   
   publish-lib:
     # Only proceed if the tests passed and we're on release
